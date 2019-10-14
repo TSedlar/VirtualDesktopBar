@@ -2,19 +2,58 @@ function Initialize()
     desktopMeasure = SKIN:GetMeasure('SetCurrentDesktop')
     panelColor = SKIN:GetVariable('PanelColor')
     panelHoverColor = SKIN:GetVariable('PanelHoverColor')
-    panelX = tonumber(SKIN:GetVariable('PanelPosX'))
-    panelY = tonumber(SKIN:GetVariable('PanelPosY'))
-    panelWidth = tonumber(SKIN:GetVariable('PanelWidth'))
+    panelItemWidth = tonumber(SKIN:GetVariable('PanelItemWidth'))
     panelItemHeight = tonumber(SKIN:GetVariable('PanelItemHeight'))
+    indicatorWidth = tonumber(SKIN:GetVariable('PanelIndicatorWidth'))
+    iconOrder = SKIN:GetVariable('IconOrder')
+    barSize = SKIN:GetVariable('WinTaskbarSize')
+end
+
+function SetResolution(w, h)
+    _G.screenWidth = w
+    _G.screenHeight = h
+    -- Set panel size
+    if iconOrder == 'T2B' or iconOrder == 'B2T' then
+        SKIN:Bang('!SetOption', 'Panel', 'X', 0)
+        SKIN:Bang('!SetOption', 'Panel', 'Y', 0)
+        SKIN:Bang('!SetOption', 'Panel', 'W', panelItemWidth)
+        SKIN:Bang('!SetOption', 'Panel', 'H', h)
+        SKIN:Bang('!SetOption', 'PanelIndicator', 'W', indicatorWidth)
+        SKIN:Bang('!SetOption', 'PanelIndicator', 'H', panelItemHeight)
+    elseif iconOrder == 'L2R' or iconOrder == 'R2L' then
+        SKIN:Bang('!SetOption', 'Panel', 'X', 0)
+        SKIN:Bang('!SetOption', 'Panel', 'Y', 0)
+        SKIN:Bang('!SetOption', 'Panel', 'W', w)
+        SKIN:Bang('!SetOption', 'Panel', 'H', panelItemHeight)
+        SKIN:Bang('!SetOption', 'PanelIndicator', 'W', panelItemWidth)
+        SKIN:Bang('!SetOption', 'PanelIndicator', 'H', indicatorWidth)
+    end
 end
 
 function DisplayWorkspaces()
     -- used for relative y-offset changing
-    local y = panelY
+    local x = 0
+    local y = 0
 
     -- safe-access variables
     local workspaces = _G.workspaces or {}
     local currentDesktop = _G.currentDesktop or 1
+    
+    -- Setup the workspace count for calculations
+    local workspaceCount = #workspaces
+
+    -- Set initial positions
+    if iconOrder == 'T2B' then
+        x = 0
+        y = barSize
+    elseif iconOrder == 'B2T' then
+        x = 0
+        y = _G.screenHeight - barSize - (workspaceCount * panelItemHeight)
+    elseif iconOrder == 'L2R' then
+        x = barSize
+    elseif iconOrder == 'R2L' then
+        x = _G.screenWidth - barSize - (workspaceCount * panelItemWidth)
+    end
 
     -- Draw all of the workspace icons
     for idx, v in ipairs(workspaces) do
@@ -24,9 +63,9 @@ function DisplayWorkspaces()
         SKIN:Bang('!SetOption', meter, 'ImageName', imgPath)
         SKIN:Bang('!SetOption', meter, 'PreserveAspectRatio', 1)
         SKIN:Bang('!SetOption', meter, 'Padding', '6,4,6,4')
-        SKIN:Bang('!SetOption', meter, 'X', panelX)
+        SKIN:Bang('!SetOption', meter, 'X', x)
         SKIN:Bang('!SetOption', meter, 'Y', y)
-        SKIN:Bang('!SetOption', meter, 'W', panelWidth - 12)
+        SKIN:Bang('!SetOption', meter, 'W', panelItemWidth - 12)
         SKIN:Bang('!SetOption', meter, 'H', panelItemHeight - 8)
 
         local hover = '[!SetOption ' .. meter .. ' SolidColor ' .. panelHoverColor .. ']'
@@ -38,6 +77,25 @@ function DisplayWorkspaces()
             SKIN:Bang('!SetOption', meter, 'SolidColor', panelHoverColor)
             SKIN:Bang('!SetOption', meter, 'MouseOverAction', '[]')
             SKIN:Bang('!SetOption', meter, 'MouseLeaveAction', '[]')
+
+            -- Set the indicator meter
+            local indicatorMeter = 'PanelIndicator'
+            -- Move the indicator to the correct position
+            if iconOrder == 'T2B' then
+                SKIN:Bang('!SetOption', indicatorMeter, 'X', x + panelItemWidth - indicatorWidth)
+                SKIN:Bang('!SetOption', indicatorMeter, 'Y', y)
+            elseif iconOrder == 'B2T' then
+                SKIN:Bang('!SetOption', indicatorMeter, 'X', x - panelItemWidth)
+                SKIN:Bang('!SetOption', indicatorMeter, 'Y', y)
+            elseif iconOrder == 'L2R' then
+                SKIN:Bang('!SetOption', indicatorMeter, 'X', x)
+                SKIN:Bang('!SetOption', indicatorMeter, 'Y', y + panelItemHeight - indicatorWidth)
+            elseif iconOrder == 'R2L' then
+                SKIN:Bang('!SetOption', indicatorMeter, 'X', x)
+                SKIN:Bang('!SetOption', indicatorMeter, 'Y', y)
+            end
+            -- Redraw the indicator
+            SKIN:Bang('!UpdateMeter', indicatorMeter)
         else
             -- Add hover color changing
             SKIN:Bang('!SetOption', meter, 'SolidColor', panelColor)
@@ -55,16 +113,12 @@ function DisplayWorkspaces()
         SKIN:Bang('!UpdateMeter', meter)
         SKIN:Bang('!Redraw')
 
-        y = y + panelItemHeight
+        if iconOrder == 'T2B' or iconOrder == 'B2T' then
+            y = y + panelItemHeight
+        elseif iconOrder == 'L2R' or iconOrder == 'R2L' then
+            x = x + panelItemWidth
+        end
     end
-
-    -- Set the indicator meter
-    local indicatorMeter = 'PanelIndicator'
-    -- Move the indicator to the correct position
-    SKIN:Bang('!SetOption', indicatorMeter, 'Y', 30 + ((currentDesktop - 1) * panelItemHeight))
-    -- Redraw the indicator
-    SKIN:Bang('!UpdateMeter', indicatorMeter)
-    SKIN:Bang('!Redraw')
 end
 
 function SetDesktop(number)

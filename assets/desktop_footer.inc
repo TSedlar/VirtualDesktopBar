@@ -1,5 +1,5 @@
 [Rainmeter]
-OnRefreshAction=[!CommandMeasure WorkspaceCreator "SetDesktopData()"][!Update][!CommandMeasure CreateDesktops "Run"][!CommandMeasure SetCurrentDesktop "Run"]
+OnRefreshAction=[!CommandMeasure WorkspaceCreator "SetResolution(#SCREENAREAWIDTH#, #SCREENAREAHEIGHT#)"][!CommandMeasure WorkspaceCreator "SetDesktopData()"][!Update][!CommandMeasure CreateDesktops "Run"][!CommandMeasure SetCurrentDesktop "Run"]
 OnUpdateAction=[!CommandMeasure SetCurrentDesktop "Run"]
 
 ; Do not reconfigure
@@ -12,10 +12,6 @@ DesktopTarget=1
 [PanelIndicator]
 Meter=Shape
 SolidColor=#PanelIndicatorColor#
-X=(#PanelPosX# + #PanelWidth# - #PanelIndicatorWidth#)
-Y=#PanelPosY#
-W=#PanelIndicatorWidth#
-H=#PanelItemHeight#
 
 [SetCurrentDesktop]
 Measure=Plugin
