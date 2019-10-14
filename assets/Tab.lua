@@ -5,25 +5,45 @@ function Initialize()
     panelItemWidth = tonumber(SKIN:GetVariable('PanelItemWidth'))
     panelItemHeight = tonumber(SKIN:GetVariable('PanelItemHeight'))
     indicatorWidth = tonumber(SKIN:GetVariable('PanelIndicatorWidth'))
-    iconOrder = SKIN:GetVariable('IconOrder')
-    barSize = SKIN:GetVariable('WinTaskbarSize')
 end
 
-function SetResolution(w, h)
+function SetResolution(w, h, aX, aY, aW, aH)
     _G.screenWidth = w
     _G.screenHeight = h
+
+    -- Set icon order
+    if w - aW > 0 then
+        if aX > 0 then
+            _G.iconOrder = 'L2R'
+        else
+            _G.iconOrder = 'R2L'
+        end
+    else
+        if aY > 0 then
+            _G.iconOrder = 'T2B'
+        else
+            _G.iconOrder = 'B2T'
+        end
+    end
+
     -- Set panel size
-    if iconOrder == 'T2B' or iconOrder == 'B2T' then
+    if _G.iconOrder == 'T2B' or _G.iconOrder == 'B2T' then
+        _G.barSize = h - aH
         SKIN:Bang('!SetOption', 'Panel', 'X', 0)
-        SKIN:Bang('!SetOption', 'Panel', 'Y', barSize)
+        if _G.iconOrder == 'T2B' then
+            SKIN:Bang('!SetOption', 'Panel', 'Y', _G.barSize)
+        end
         SKIN:Bang('!SetOption', 'Panel', 'W', panelItemWidth)
-        SKIN:Bang('!SetOption', 'Panel', 'H', h)
+        SKIN:Bang('!SetOption', 'Panel', 'H', h - _G.barSize)
         SKIN:Bang('!SetOption', 'PanelIndicator', 'W', indicatorWidth)
         SKIN:Bang('!SetOption', 'PanelIndicator', 'H', panelItemHeight)
-    elseif iconOrder == 'L2R' or iconOrder == 'R2L' then
-        SKIN:Bang('!SetOption', 'Panel', 'X', barSize)
+    elseif _G.iconOrder == 'L2R' or _G.iconOrder == 'R2L' then
+        _G.barSize = w - aW
+        if _G.iconOrder == 'L2R' then
+            SKIN:Bang('!SetOption', 'Panel', 'X', _G.barSize)
+        end
         SKIN:Bang('!SetOption', 'Panel', 'Y', 0)
-        SKIN:Bang('!SetOption', 'Panel', 'W', w)
+        SKIN:Bang('!SetOption', 'Panel', 'W', w - _G.barSize)
         SKIN:Bang('!SetOption', 'Panel', 'H', panelItemHeight)
         SKIN:Bang('!SetOption', 'PanelIndicator', 'W', panelItemWidth)
         SKIN:Bang('!SetOption', 'PanelIndicator', 'H', indicatorWidth)
@@ -43,16 +63,16 @@ function DisplayWorkspaces()
     local workspaceCount = #workspaces
 
     -- Set initial positions
-    if iconOrder == 'T2B' then
+    if _G.iconOrder == 'T2B' then
         x = 0
         y = barSize
-    elseif iconOrder == 'B2T' then
+    elseif _G.iconOrder == 'B2T' then
         x = 0
-        y = _G.screenHeight - barSize - (workspaceCount * panelItemHeight)
-    elseif iconOrder == 'L2R' then
+        y = _G.screenHeight - _G.barSize - (workspaceCount * panelItemHeight)
+    elseif _G.iconOrder == 'L2R' then
         x = barSize
-    elseif iconOrder == 'R2L' then
-        x = _G.screenWidth - barSize - (workspaceCount * panelItemWidth)
+    elseif _G.iconOrder == 'R2L' then
+        x = _G.screenWidth - _G.barSize - (workspaceCount * panelItemWidth)
     end
 
     -- Draw all of the workspace icons
@@ -81,16 +101,16 @@ function DisplayWorkspaces()
             -- Set the indicator meter
             local indicatorMeter = 'PanelIndicator'
             -- Move the indicator to the correct position
-            if iconOrder == 'T2B' then
+            if _G.iconOrder == 'T2B' then
                 SKIN:Bang('!SetOption', indicatorMeter, 'X', x + panelItemWidth - indicatorWidth)
                 SKIN:Bang('!SetOption', indicatorMeter, 'Y', y)
-            elseif iconOrder == 'B2T' then
+            elseif _G.iconOrder == 'B2T' then
                 SKIN:Bang('!SetOption', indicatorMeter, 'X', x - panelItemWidth)
                 SKIN:Bang('!SetOption', indicatorMeter, 'Y', y)
-            elseif iconOrder == 'L2R' then
+            elseif _G.iconOrder == 'L2R' then
                 SKIN:Bang('!SetOption', indicatorMeter, 'X', x)
                 SKIN:Bang('!SetOption', indicatorMeter, 'Y', y + panelItemHeight - indicatorWidth)
-            elseif iconOrder == 'R2L' then
+            elseif _G.iconOrder == 'R2L' then
                 SKIN:Bang('!SetOption', indicatorMeter, 'X', x)
                 SKIN:Bang('!SetOption', indicatorMeter, 'Y', y)
             end
@@ -113,9 +133,9 @@ function DisplayWorkspaces()
         SKIN:Bang('!UpdateMeter', meter)
         SKIN:Bang('!Redraw')
 
-        if iconOrder == 'T2B' or iconOrder == 'B2T' then
+        if _G.iconOrder == 'T2B' or _G.iconOrder == 'B2T' then
             y = y + panelItemHeight
-        elseif iconOrder == 'L2R' or iconOrder == 'R2L' then
+        elseif _G.iconOrder == 'L2R' or _G.iconOrder == 'R2L' then
             x = x + panelItemWidth
         end
     end

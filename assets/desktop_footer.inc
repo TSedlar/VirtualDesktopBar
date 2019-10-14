@@ -1,5 +1,5 @@
 [Rainmeter]
-OnRefreshAction=[!CommandMeasure WorkspaceCreator "SetResolution(#SCREENAREAWIDTH#, #SCREENAREAHEIGHT#)"][!CommandMeasure WorkspaceCreator "SetDesktopData()"][!Update][!CommandMeasure CreateDesktops "Run"][!CommandMeasure SetCurrentDesktop "Run"]
+OnRefreshAction=[!CommandMeasure WorkspaceCreator "SetResolution(#SCREENAREAWIDTH#, #SCREENAREAHEIGHT#, #WORKAREAX#, #WORKAREAY#, #WORKAREAWIDTH#, #WORKAREAHEIGHT#)"][!CommandMeasure WorkspaceCreator "SetDesktopData()"][!Update][!CommandMeasure CreateDesktops "Run"][!CommandMeasure SetCurrentDesktop "Run"]
 OnUpdateAction=[!CommandMeasure SetCurrentDesktop "Run"]
 
 ; Do not reconfigure
