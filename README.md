@@ -15,6 +15,25 @@ This project makes use of of two main projects:
 
 Installation can be done by simply [Downloading](https://github.com/TSedlar/VirtualDesktopBar/archive/master.zip) the master branch and extracting it to `Documents/Rainmeter/Skins/`
 
+## Setting things up
+
+Within your main `Rainmeter.ini`, you're going to want to set up a `DesktopWorkArea`.
+Within `VirtualDesktopBar.ini` you're going to want to set the bar height according to your monitor.
+
+As an example for my monitor, which is 2560x1440:
+
+Rainmeter.ini should contain:
+```
+DesktopWorkArea=41,34,2556,1436
+```
+
+[VirtualDesktopBar.ini](https://github.com/TSedlar/VirtualDesktopBar/blob/master/VirtualDesktopBar.ini#L21) should contain:
+```
+PanelHeight=1410
+```
+
+This all depends on your taskbar height, etc.
+
 ## Shout outs
 
 - [windows-desktop-switcher](https://github.com/pmb6tz/windows-desktop-switcher) for portions of the AHK script
@@ -33,3 +52,10 @@ To change colors and sizes, go [here](https://github.com/TSedlar/VirtualDesktopB
 To modify workspace categories, you can add, change, or remove [here](https://github.com/TSedlar/VirtualDesktopBar/blob/master/VirtualDesktopBar.ini#L35-L51).
 
 Lastly, when adding categories, make sure to add a matching icon with the same name under [assets/images](https://github.com/TSedlar/VirtualDesktopBar/tree/master/assets/images)
+
+
+## Future improvements
+
+- Allow the icons to be created from the bottom->up for users that put the windows taskbar on the bottom of the screen.
+- Allow the icons to be created from left->right for users that put the windows taskbar on the left side of the screen.
+- Allow the icons to be created from right->left for users that put the windows taskbar on the right side of the screen.
