@@ -15,13 +15,13 @@ function SetResolution(w, h)
     -- Set panel size
     if iconOrder == 'T2B' or iconOrder == 'B2T' then
         SKIN:Bang('!SetOption', 'Panel', 'X', 0)
-        SKIN:Bang('!SetOption', 'Panel', 'Y', 0)
+        SKIN:Bang('!SetOption', 'Panel', 'Y', barSize)
         SKIN:Bang('!SetOption', 'Panel', 'W', panelItemWidth)
         SKIN:Bang('!SetOption', 'Panel', 'H', h)
         SKIN:Bang('!SetOption', 'PanelIndicator', 'W', indicatorWidth)
         SKIN:Bang('!SetOption', 'PanelIndicator', 'H', panelItemHeight)
     elseif iconOrder == 'L2R' or iconOrder == 'R2L' then
-        SKIN:Bang('!SetOption', 'Panel', 'X', 0)
+        SKIN:Bang('!SetOption', 'Panel', 'X', barSize)
         SKIN:Bang('!SetOption', 'Panel', 'Y', 0)
         SKIN:Bang('!SetOption', 'Panel', 'W', w)
         SKIN:Bang('!SetOption', 'Panel', 'H', panelItemHeight)
