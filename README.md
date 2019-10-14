@@ -17,20 +17,13 @@ Installation can be done by simply [Downloading](https://github.com/TSedlar/Virt
 
 ## Setting things up
 
-Within your main `Rainmeter.ini`, you're going to want to set up a `DesktopWorkArea`.
-
-Within `VirtualDesktopBar.ini` you're going to want to set the bar height according to what you have it set to.
+Within your main `Rainmeter.ini`, you're going to want to set up a `DesktopWorkArea`. This will make windows not collide with the taskbar when they are maximized.
 
 As an example for my monitor, which is 2560x1440:
 
 Rainmeter.ini should contain:
 ```
 DesktopWorkArea=41,34,2556,1436
-```
-
-[VirtualDesktopBar.ini](https://github.com/TSedlar/VirtualDesktopBar/blob/master/VirtualDesktopBar.ini#L201) should contain:
-```
-WinTaskbarSize=30
 ```
 
 This all depends on your taskbar height, etc.
@@ -48,8 +41,8 @@ Use this with Microsoft's [PowerToys](https://github.com/microsoft/PowerToys), s
 
 It should be pretty straight forward to make changes to the configuration of this widget.
 
-To change colors and sizes, go [here](https://github.com/TSedlar/VirtualDesktopBar/blob/master/VirtualDesktopBar.ini#L16-L255).
+To change colors and sizes, go [here](https://github.com/TSedlar/VirtualDesktopBar/blob/master/VirtualDesktopBar.ini#L16-L22).
 
-To modify workspace categories, you can add, change, or remove [here](https://github.com/TSedlar/VirtualDesktopBar/blob/master/VirtualDesktopBar.ini#L35-L51).
+To modify workspace categories, you can add, change, or remove [here](https://github.com/TSedlar/VirtualDesktopBar/blob/master/VirtualDesktopBar.ini#L32-L48).
 
 Lastly, when adding categories, make sure to add a matching icon with the same name under [assets/images](https://github.com/TSedlar/VirtualDesktopBar/tree/master/assets/images)
