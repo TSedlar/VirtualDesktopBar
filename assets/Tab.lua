@@ -76,8 +76,6 @@ function DisplayWorkspaces()
     -- Setup the workspace count for calculations
     local workspaceCount = #workspaces
 
-    print(_G.iconOrder)
-
     -- Set initial positions
     if _G.iconOrder == 'T2B' then
         x = 0
