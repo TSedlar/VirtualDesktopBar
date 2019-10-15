@@ -146,4 +146,10 @@ if (A_Args.Length() > 0) {
         FileAppend, %spawnAmount%, *
         ExitApp, 0
     }
+
+    if (command = "getTaskbarPos") {
+        WinGetPos x, y, w, h, ahk_class Shell_TrayWnd
+        FileAppend, %x%;%y%;%w%;%h%, *
+        ExitApp, 0
+    }
 }

@@ -1,4 +1,5 @@
 function Initialize()
+    resolutionMeasure = SKIN:GetMeasure('SetResolution')
     desktopMeasure = SKIN:GetMeasure('SetCurrentDesktop')
     panelColor = SKIN:GetVariable('PanelColor')
     panelHoverColor = SKIN:GetVariable('PanelHoverColor')
@@ -7,28 +8,39 @@ function Initialize()
     indicatorWidth = tonumber(SKIN:GetVariable('PanelIndicatorWidth'))
 end
 
-function SetResolution(w, h, aX, aY, aW, aH)
+function SetResolution(w, h)
     _G.screenWidth = w
     _G.screenHeight = h
 
-    -- Set icon order
-    if w - aW > 0 then
-        if aX > 0 then
-            _G.iconOrder = 'L2R'
-        else
-            _G.iconOrder = 'R2L'
-        end
-    else
-        if aY > 0 then
+    local taskbarPosString = resolutionMeasure:GetStringValue() .. ';'
+    local taskbarPos = {}
+
+    for i in taskbarPosString:gmatch('([^;]+)') do  
+        taskbarPos[#taskbarPos + 1] = tonumber(i)
+    end
+
+    local taskbarX = taskbarPos[1]
+    local taskbarY = taskbarPos[2]
+    local taskbarW = taskbarPos[3]
+    local taskbarH = taskbarPos[4]
+
+    if taskbarW == _G.screenWidth then
+        if taskbarX == 0 and taskbarY == 0 then
             _G.iconOrder = 'T2B'
         else
             _G.iconOrder = 'B2T'
+        end
+    else
+        if taskbarX == 0 then
+            _G.iconOrder = 'L2R'
+        else
+            _G.iconOrder = 'R2L'
         end
     end
 
     -- Set panel size
     if _G.iconOrder == 'T2B' or _G.iconOrder == 'B2T' then
-        _G.barSize = h - aH
+        _G.barSize = taskbarH
         SKIN:Bang('!SetOption', 'Panel', 'X', 0)
         if _G.iconOrder == 'T2B' then
             SKIN:Bang('!SetOption', 'Panel', 'Y', _G.barSize)
@@ -38,7 +50,7 @@ function SetResolution(w, h, aX, aY, aW, aH)
         SKIN:Bang('!SetOption', 'PanelIndicator', 'W', indicatorWidth)
         SKIN:Bang('!SetOption', 'PanelIndicator', 'H', panelItemHeight)
     elseif _G.iconOrder == 'L2R' or _G.iconOrder == 'R2L' then
-        _G.barSize = w - aW
+        _G.barSize = taskbarW
         if _G.iconOrder == 'L2R' then
             SKIN:Bang('!SetOption', 'Panel', 'X', _G.barSize)
         end
@@ -48,6 +60,8 @@ function SetResolution(w, h, aX, aY, aW, aH)
         SKIN:Bang('!SetOption', 'PanelIndicator', 'W', panelItemWidth)
         SKIN:Bang('!SetOption', 'PanelIndicator', 'H', indicatorWidth)
     end
+
+    DisplayWorkspaces()
 end
 
 function DisplayWorkspaces()
@@ -61,6 +75,8 @@ function DisplayWorkspaces()
     
     -- Setup the workspace count for calculations
     local workspaceCount = #workspaces
+
+    print(_G.iconOrder)
 
     -- Set initial positions
     if _G.iconOrder == 'T2B' then
